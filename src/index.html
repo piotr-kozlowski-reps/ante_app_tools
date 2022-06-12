@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../public/styles.css" />
+    <title>extract tools</title>
+  </head>
+  <body class="min-h-screen bg-gray-200">
+    <div class="bg-white md:container md:mx-auto rounded-2xl">
+      <div class="m-4 p-8">
+        <p class="font-bold">HTML z pliku index:</p>
+        <form>
+          <textarea
+            rows="50"
+            class="bg-gray-50 mt-2 rounded-2xl min-w-full h-96"
+            id="index-textarea"
+          >
+      <div class="box-outer col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 comp ext">
+        <div class="box">
+          <img src="images/2002_06__schronisko_mlodziezowe_dusseldorf_niemcy___ico.jpg" alt="06.2002r. Schronisko młodzieżowe, Düsseldorf. Kraj: Niemcy." />
+          <div class="more">
+            <div class="project">
+              <a href="2002_06__schronisko_mlodziezowe_dusseldorf_niemcy.html" class="link">
+                <div class="desc">
+                  <h3>SCHRONISKO MŁODZIEŻOWE</h3>
+                  <h4>2002 / DÜSSELDORF [NIEMCY]</h4>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+          </textarea>
+        </form>
+
+        <!-- wynik -->
+
+        <div class="mt-10">
+          <p class="font-semibold">Wynik:</p>
+
+          <!-- wynik undefinded -->
+          <div id="result-undefined" class="mt-8">
+            <span class="ml-10 font-normal text-gray-300"
+              >nic nie wpisałeś</span
+            >
+          </div>
+
+          <!-- wynik not understandable -->
+          <div id="result-not-understandable" class="mt-8">
+            <span class="ml-10 font-normal text-gray-300"
+              >nie rozumiem co wkleiłeś/łaś</span
+            >
+          </div>
+
+          <!-- wynik dla index -->
+          <div id="result-for-index" class="mt-8">
+            <p class="font-semibold">
+              Nazwa projektu:
+              <input
+                type="text"
+                class="ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl px-3 py-4 w-14"
+                id="project-name"
+              />
+              <!-- <span class="ml-10 font-normal text-gray-6" id="project-name"
+                >nic nie znalazłem</span
+              > -->
+              <button
+                type="button"
+                class="text-xs text-white bg-gray-400 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+              >
+                kopiuj
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./index.js"></script>
+  </body>
+</html>
