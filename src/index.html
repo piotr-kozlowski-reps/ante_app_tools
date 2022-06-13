@@ -10,7 +10,7 @@
   <body class="min-h-screen bg-gray-200">
     <div class="bg-white md:container md:mx-auto rounded-2xl">
       <div class="m-4 p-8">
-        <p class="font-bold">HTML z pliku index:</p>
+        <p class="font-bold">Tu wklej HTML:</p>
         <form>
           <textarea
             rows="50"
@@ -57,23 +57,100 @@
 
           <!-- wynik dla index -->
           <div id="result-for-index" class="mt-8">
-            <p class="font-semibold">
-              Nazwa projektu:
-              <input
-                type="text"
-                class="ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl px-3 py-4 w-14"
-                id="project-name"
-              />
-              <!-- <span class="ml-10 font-normal text-gray-6" id="project-name"
-                >nic nie znalazłem</span
-              > -->
-              <button
-                type="button"
-                class="text-xs text-white bg-gray-400 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
-              >
-                kopiuj
-              </button>
-            </p>
+            <div class="">
+              <p class="font-semibold">
+                Nazwa projektu:
+                <span
+                  id="project-name"
+                  class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                  >drak danych</span
+                >
+                <button
+                  type="button"
+                  class="text-xs text-white bg-gray-400 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+                  id="project-name-button"
+                >
+                  kopiuj
+                </button>
+              </p>
+            </div>
+
+            <div class="mt-2">
+              <p class="font-semibold">
+                Miejscowość:
+                <span
+                  id="project-city"
+                  class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                  >drak danych</span
+                >
+                <button
+                  type="button"
+                  class="text-xs text-white bg-gray-400 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+                  id="project-city-button"
+                >
+                  kopiuj
+                </button>
+              </p>
+            </div>
+
+            <div class="mt-2">
+              <p class="font-semibold">
+                Kraj:
+                <span
+                  id="project-country"
+                  class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                  >drak danych</span
+                >
+                <button
+                  type="button"
+                  class="text-xs text-white bg-gray-400 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+                  id="project-country-button"
+                >
+                  kopiuj
+                </button>
+              </p>
+            </div>
+
+            <div class="mt-2">
+              <p class="font-semibold">
+                Klient:
+                <span
+                  id="project-client"
+                  class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                  >drak danych</span
+                >
+                <button
+                  type="button"
+                  class="text-xs text-white bg-gray-400 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+                  id="project-client-button"
+                >
+                  kopiuj
+                </button>
+              </p>
+            </div>
+
+            <div class="mt-2">
+              <p class="font-semibold">
+                Data:
+                <span
+                  id="project-data"
+                  class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                  >drak danych</span
+                >
+              </p>
+            </div>
+
+            <div class="mt-2">
+              <p class="font-semibold">
+                Kategorie:
+                <span id="categories">
+                  <span
+                    class="px-5 py-1 font-normal text-xs text-gray-6 rounded-2xl max-w-full bg-gray-200 ml-2"
+                    >COMPETITION</span
+                  >
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>

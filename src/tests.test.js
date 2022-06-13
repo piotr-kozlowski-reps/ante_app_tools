@@ -1,6 +1,10 @@
 const {
   extractProjectName,
   defineTypeOfInput,
+  extractProjectCity,
+  extractProjectCountry,
+  extractProjectData,
+  extractProjectCategories,
   typeOfInput,
 } = require("./index.js");
 // import { extractProjectName } from "./index.js";
@@ -106,5 +110,174 @@ describe("tests", () => {
 
     result = defineTypeOfInput(value);
     expect(result).toEqual("");
+  });
+
+  it("extractProjectCity", () => {
+    let value = `      <div class="box-outer col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 comp ext">
+        <div class="box">
+          <img src="images/2002_06__schronisko_mlodziezowe_dusseldorf_niemcy___ico.jpg" alt="06.2002r. Schronisko młodzieżowe, Düsseldorf. Kraj: Niemcy." />
+          <div class="more">
+            <div class="project">
+              <a href="2002_06__schronisko_mlodziezowe_dusseldorf_niemcy.html" class="link">
+                <div class="desc">
+                  <h3>SCHRONISKO MŁODZIEŻOWE</h3>
+                  <h4>2002 / DÜSSELDORF [NIEMCY]</h4>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    let result = extractProjectCity(value);
+    expect(result).toEqual("DÜSSELDORF");
+
+    value = `     `;
+    result = extractProjectCity(value);
+    expect(result).toEqual("");
+
+    value = `      <div class=" col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 comp ext">
+      <div class="box">
+        <img src="images/2002_06__schronisko_mlodziezowe_dusseldorf_niemcy___ico.jpg" alt="06.2002r. Schronisko młodzieżowe, Düsseldorf. Kraj: Niemcy." />
+        <div class="more">
+          <div class="project">
+            <a href="2002_06__schronisko_mlodziezowe_dusseldorf_niemcy.html" class="link">
+              <div class="desc">
+                <h3>SCHRONISKO MŁODZIEŻOWE</h3>
+                <h4>2002 / tutajcosi %%nnego [NIEMCY]</h4>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    result = extractProjectCity(value);
+    expect(result).toEqual("tutajcosi %%nnego");
+  });
+  it("extractProjectCountry", () => {
+    let value = `      <div class="box-outer col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 comp ext">
+        <div class="box">
+          <img src="images/2002_06__schronisko_mlodziezowe_dusseldorf_niemcy___ico.jpg" alt="06.2002r. Schronisko młodzieżowe, Düsseldorf. Kraj: Niemcy." />
+          <div class="more">
+            <div class="project">
+              <a href="2002_06__schronisko_mlodziezowe_dusseldorf_niemcy.html" class="link">
+                <div class="desc">
+                  <h3>SCHRONISKO MŁODZIEŻOWE</h3>
+                  <h4>2002 / DÜSSELDORF [NIEMCY]</h4>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    let result = extractProjectCountry(value);
+    expect(result).toEqual("NIEMCY");
+
+    value = `     `;
+    result = extractProjectCountry(value);
+    expect(result).toEqual("");
+
+    value = `      <div class=" col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 comp ext">
+      <div class="box">
+        <img src="images/2002_06__schronisko_mlodziezowe_dusseldorf_niemcy___ico.jpg" alt="06.2002r. Schronisko młodzieżowe, Düsseldorf. Kraj: Niemcy." />
+        <div class="more">
+          <div class="project">
+            <a href="2002_06__schronisko_mlodziezowe_dusseldorf_niemcy.html" class="link">
+              <div class="desc">
+                <h3>SCHRONISKO MŁODZIEŻOWE</h3>
+                <h4>2002 / tutajcosi %%nnego [NIEM ^&CY sdfvsdf]</h4>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    result = extractProjectCountry(value);
+    expect(result).toEqual("NIEM ^&CY sdfvsdf");
+  });
+  it("extractProjectData", () => {
+    let value = `      <div class="box-outer col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 comp ext">
+        <div class="box">
+          <img src="images/2002_06__schronisko_mlodziezowe_dusseldorf_niemcy___ico.jpg" alt="06.2002r. Schronisko młodzieżowe, Düsseldorf. Kraj: Niemcy." />
+          <div class="more">
+            <div class="project">
+              <a href="2002_06__schronisko_mlodziezowe_dusseldorf_niemcy.html" class="link">
+                <div class="desc">
+                  <h3>SCHRONISKO MŁODZIEŻOWE</h3>
+                  <h4>2002 / DÜSSELDORF [NIEMCY]</h4>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    let result = extractProjectData(value);
+    expect(result).toEqual("2002_06");
+
+    value = `     `;
+    result = extractProjectData(value);
+    expect(result).toEqual("");
+
+    value = `      <div class=" col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 comp ext">
+      <div class="box">
+        <img src="images/2002_06__schronisko_mlodziezowe_dusseldorf_niemcy___ico.jpg" alt="06.2002r. Schronisko młodzieżowe, Düsseldorf. Kraj: Niemcy." />
+        <div class="more">
+          <div class="project">
+            <a href="1902_30__schronisko_mlodziezowe_dusseldorf_niemcy.html" class="link">
+              <div class="desc">
+                <h3>SCHRONISKO MŁODZIEŻOWE</h3>
+                <h4>2002 / tutajcosi %%nnego [NIEM ^&CY sdfvsdf]</h4>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    result = extractProjectData(value);
+    expect(result).toEqual("1902_30");
+  });
+  it("extractProjectCategories", () => {
+    let value = `      <div class="box-outer col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 comp ext">
+        <div class="box">
+          <img src="images/2002_06__schronisko_mlodziezowe_dusseldorf_niemcy___ico.jpg" alt="06.2002r. Schronisko młodzieżowe, Düsseldorf. Kraj: Niemcy." />
+          <div class="more">
+            <div class="project">
+              <a href="2002_06__schronisko_mlodziezowe_dusseldorf_niemcy.html" class="link">
+                <div class="desc">
+                  <h3>SCHRONISKO MŁODZIEŻOWE</h3>
+                  <h4>2002 / DÜSSELDORF [NIEMCY]</h4>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    let result = extractProjectCategories(value);
+    expect(result).toEqual("2002_06");
+
+    value = `     `;
+    result = extractProjectData(value);
+    expect(result).toEqual("");
+
+    value = `      <div class=" col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 comp ext">
+      <div class="box">
+        <img src="images/2002_06__schronisko_mlodziezowe_dusseldorf_niemcy___ico.jpg" alt="06.2002r. Schronisko młodzieżowe, Düsseldorf. Kraj: Niemcy." />
+        <div class="more">
+          <div class="project">
+            <a href="1902_30__schronisko_mlodziezowe_dusseldorf_niemcy.html" class="link">
+              <div class="desc">
+                <h3>SCHRONISKO MŁODZIEŻOWE</h3>
+                <h4>2002 / tutajcosi %%nnego [NIEM ^&CY sdfvsdf]</h4>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    result = extractProjectData(value);
+    expect(result).toEqual("1902_30");
   });
 });
