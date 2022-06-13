@@ -1,3 +1,5 @@
+// const { imagesHtmlDummy, indexHtmlDummy } = require("./dummy.js");
+
 //enum
 const typeOfInput = {
   INDEX: "INDEXHTML",
@@ -9,63 +11,80 @@ const typeOfInput = {
 };
 
 ////--------------------------------------------------------------------------------
-// //queries
-// const indexTextareaEl = document.getElementById("index-textarea");
-// const resultUndefinedEl = document.getElementById("result-undefined");
-// const resultNotUnderstandableEl = document.getElementById(
-//   "result-not-understandable"
-// );
+//queries
+const indexTextareaEl = document.getElementById("index-textarea");
+const resultUndefinedEl = document.getElementById("result-undefined");
+const resultNotUnderstandableEl = document.getElementById(
+  "result-not-understandable"
+);
+const resultForIndexEl = document.getElementById("result-for-index");
+const resultForAppEl = document.getElementById("result-for-app");
 
-// const resultForIndexEl = document.getElementById("result-for-index");
+const projectNameEl = document.getElementById("project-name");
+const projectNameBtn = document.getElementById("project-name-button");
 
-// const projectNameEl = document.getElementById("project-name");
-// const projectNameBtn = document.getElementById("project-name-button");
+const projectCityEl = document.getElementById("project-city");
+const projectCityBtn = document.getElementById("project-city-button");
 
-// const projectCityEl = document.getElementById("project-city");
-// const projectCityBtn = document.getElementById("project-city-button");
+const projectCountryEl = document.getElementById("project-country");
+const projectCountryBtn = document.getElementById("project-country-button");
 
-// const projectCountryEl = document.getElementById("project-country");
-// const projectCountryBtn = document.getElementById("project-country-button");
+const projectDataEl = document.getElementById("project-data");
 
-// const projectDataEl = document.getElementById("project-data");
-// //vars
-// const projectCategoriesEl = document.getElementById("categories");
+const projectIcoEl = document.getElementById("project-ico");
+const projectIcoBtn = document.getElementById("project-ico-button");
 
-// //trigger
-// indexTextareaEl.addEventListener("input", refresh);
+const appImageEl = document.getElementById("app-image");
+const appImageBtn = document.getElementById("app-image-button");
 
-// ////logic
+const appNameEl = document.getElementById("app-name");
+const appNameBtn = document.getElementById("app-name-button");
 
-// //first refresh on start
-// refresh();
+//vars
+const projectCategoriesEl = document.getElementById("categories");
 
-// function refresh() {
-//   console.log("refresh");
-//   hideAll();
-//   const textInput = indexTextareaEl.value;
+//trigger
+indexTextareaEl.addEventListener("input", refresh);
 
-//   //empty result
-//   if (textInput.trim() === "") {
-//     showElement(resultUndefinedEl);
-//   }
+//dummy paste
+indexTextareaEl.innerText = appHtmlDummy;
 
-//   const currentTypeOfInput = defineTypeOfInput(textInput);
+//first refresh on start
+refresh();
 
-//   switch (currentTypeOfInput) {
-//     case typeOfInput.INDEX:
-//       showAndRefreshIndexInput(textInput);
-//       break;
+function refresh() {
+  console.log("refresh");
+  hideAll();
+  const textInput = indexTextareaEl.value;
 
-//     case typeOfInput.EMPTY:
-//       break;
+  //empty result
+  if (textInput.trim() === "") {
+    showElement(resultUndefinedEl);
+  }
 
-//     default:
-//       showElement(resultNotUnderstandableEl);
-//   }
-// }
+  const currentTypeOfInput = defineTypeOfInput(textInput);
+
+  switch (currentTypeOfInput) {
+    case typeOfInput.INDEX:
+      showAndRefreshIndexInput(textInput);
+      break;
+
+    case typeOfInput.APP_PROJECT:
+      showAndRefreshAppInput(textInput);
+      break;
+
+    case typeOfInput.EMPTY:
+      break;
+
+    default:
+      showElement(resultNotUnderstandableEl);
+  }
+}
 ////--------------------------------------------------------------------------------
 
 //utils
+
+//index extract
 function extractProjectName(valueToSearchFromIndex) {
   return valueToSearchFromIndex.substring(
     valueToSearchFromIndex.indexOf("<h3>") + 4,
@@ -94,18 +113,27 @@ function extractProjectCountry(valueToSearchFromIndex) {
 }
 function extractProjectData(valueToSearchFromIndex) {
   let result = "";
-  result = valueToSearchFromIndex.substring(
+
+  const valueToSearchThrough = valueToSearchFromIndex.substring(
     valueToSearchFromIndex.indexOf(`href="`) + 6,
     valueToSearchFromIndex.indexOf(`" class`)
-  );
-  result = result.substring(0, result.indexOf("__"));
+  ); //?
 
-  return result.trim();
+  if (!valueToSearchThrough.startsWith("en")) {
+    result = valueToSearchThrough.substring(
+      0,
+      valueToSearchThrough.indexOf("__")
+    );
+  } else {
+    result = valueToSearchThrough.substring(3, 10);
+  }
+
+  return result.trim(); //?
 }
 function extractProjectCategories(valueToSearchFromIndex) {
   let result = "";
 
-  result = valueToSearchFromIndex.substring(
+  const stringToHandle = valueToSearchFromIndex.substring(
     valueToSearchFromIndex.indexOf("<div>"),
     valueToSearchFromIndex.indexOf(">")
   );
@@ -119,18 +147,57 @@ function extractProjectCategories(valueToSearchFromIndex) {
     PANORAMA: ` pano`,
     ARAPP: ` arapps`,
   };
-  const foundCategories = [];
-  lookedForCategories.forEach((cat) => {
-    console.log(cat);
+  const foundCategories = []; //?
+  for (const key in lookedForCategories) {
+    if (stringToHandle.includes(lookedForCategories[key])) {
+      foundCategories.push(key);
+    }
+  }
+
+  foundCategories.forEach((cat) => {
+    result += `<span class="px-5 py-1 font-normal text-xs text-gray-6 rounded-2xl max-w-full bg-gray-200 ml-2">${cat}</span></span>`;
   });
 
-  //lista poszukiwanych stringów - mapa klucz/wartość
-  //forEach - jeżeli znalazł klucz to wpisz wartość do tablicy
-  //forEach po tablicy i wygeneruj listę SPANów do wklejenia jako innerHTML do Noda głównego
+  return result;
+}
+function extractProjectIco(valueToSearchFromIndex) {
+  let result = "";
+  result = valueToSearchFromIndex.substring(
+    valueToSearchFromIndex.indexOf(`src="images/`) + 12,
+    valueToSearchFromIndex.indexOf(`alt="`) - 2
+  );
 
-  // result = result.substring(0, result.indexOf("__"));
+  return result.trim();
+}
+
+//app extract
+function extractAppImage(valueToSearchFromIndex) {
+  let result = valueToSearchFromIndex.substring(
+    valueToSearchFromIndex.indexOf("<!--lewa-->"),
+    valueToSearchFromIndex.indexOf("<!--end container-->")
+  );
+
+  result = result.substring(
+    result.indexOf(`src="images/`) + 12,
+    result.indexOf(`<div class="col-lg-4 equal-height">`)
+  );
+
+  result = result.substring(0, result.indexOf(`">`));
 
   return result;
+}
+function extractAppName(valueToSearchFromIndex) {
+  let result = valueToSearchFromIndex.substring(
+    valueToSearchFromIndex.indexOf("<!--lewa-->"),
+    valueToSearchFromIndex.indexOf("<!--end container-->")
+  );
+
+  result = result.substring(
+    result.indexOf(`<h2>`) + 4,
+    result.indexOf(`<br />`)
+  );
+
+  return result.toUpperCase();
 }
 
 function showElement(element) {
@@ -192,6 +259,17 @@ function defineTypeOfInput(inputText) {
       return typeOfInput.INDEX;
   }
 
+  // app html
+  const appPart = inputText.substring(
+    inputText.indexOf("<!--lewa-->"),
+    inputText.indexOf("<!--end container-->")
+  ); //?
+  if (appPart) {
+    if (appPart.includes("AR application")) {
+      return typeOfInput.APP_PROJECT;
+    }
+  }
+
   return result;
 }
 
@@ -199,6 +277,7 @@ function hideAll() {
   hideElement(resultUndefinedEl);
   hideElement(resultNotUnderstandableEl);
   hideElement(resultForIndexEl);
+  hideElement(resultForAppEl);
 }
 
 function copyToClipboard(text) {
@@ -246,6 +325,60 @@ function showAndRefreshIndexInput(textInput) {
     projectCategoriesEl,
     null
   );
+  //project Ico
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractProjectIco,
+    projectIcoEl,
+    projectIcoBtn
+  );
+}
+
+function showAndRefreshAppInput(textInput) {
+  showElement(resultForAppEl);
+
+  //app image
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractAppImage,
+    appImageEl,
+    appImageBtn
+  );
+  //app name
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractAppName,
+    appNameEl,
+    appNameBtn
+  );
+  // //project Country
+  // updateInfoWithCopyToClipboardButton(
+  //   textInput,
+  //   extractProjectCountry,
+  //   projectCountryEl,
+  //   projectCountryBtn
+  // );
+  // //project Data
+  // updateInfoWithCopyToClipboardButton(
+  //   textInput,
+  //   extractProjectData,
+  //   projectDataEl,
+  //   null
+  // );
+  // //project Categories
+  // updateInfoWithCopyToClipboardButton(
+  //   textInput,
+  //   extractProjectCategories,
+  //   projectCategoriesEl,
+  //   null
+  // );
+  // //project Ico
+  // updateInfoWithCopyToClipboardButton(
+  //   textInput,
+  //   extractProjectIco,
+  //   projectIcoEl,
+  //   projectIcoBtn
+  // );
 }
 
 function updateInfoWithCopyToClipboardButton(textInput, callbackFn, el, btn) {
@@ -263,5 +396,8 @@ module.exports = {
   extractProjectCountry,
   extractProjectData,
   extractProjectCategories,
+  extractProjectIco,
+  extractAppImage,
+  extractAppName,
   typeOfInput,
 };
