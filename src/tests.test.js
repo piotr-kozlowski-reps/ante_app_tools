@@ -7,10 +7,20 @@ const {
   extractProjectCategories,
   extractProjectIco,
   extractAppImage,
-  typeOfInput,
+  extractAppDescription,
+  extractAppAndroidLink,
+  extractAppIOSLink,
   extractAppName,
+  extractAppClient,
+  typeOfInput,
 } = require("./index.js");
-const { appHtmlDummy, imagesHtmlDummy, indexHtmlDummy } = require("./dummy.js");
+const {
+  appHtmlDummy,
+  appHtmlDummy2,
+  imagesHtmlDummy,
+  indexHtmlDummy2,
+  indexHtmlDummy,
+} = require("./dummy.js");
 
 describe("overall", () => {
   it("defineTypeOfInput", () => {
@@ -207,21 +217,7 @@ describe("index", () => {
     result = extractProjectData(value);
     expect(result).toEqual("1902_30");
 
-    value = `	  <div class="box-outer col-lg-3 col-md-3 col-sm-4 col-xs-6 col-xxxs-12 int">
-        <div class="box">
-          <img src="images/2020_03_wnetrze_mieszkalne_dusseldorf_niemcy_ico.jpg" alt="March, 2020. Apartment Interior, Düsseldorf. Country: Germany." />
-          <div class="more">
-            <div class="project">
-              <a href="en_2020_03_apartment_interior_dusseldorf_germany.html" class="link">
-                <div class="desc">
-                  <h3>APARTMENT INTERIORS</h3>
-                  <h4>2020 / DÜSSELDORF  [GERMANY]</h4>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>`;
+    value = indexHtmlDummy2;
     result = extractProjectData(value); //?
     expect(result).toEqual("2020_03");
   });
@@ -370,5 +366,42 @@ describe("app", () => {
 
     const result1 = extractAppName(value);
     expect(result1).toEqual("VILLA MELBECK");
+  });
+  it("extractAppDescription", () => {
+    let value = appHtmlDummy;
+
+    let result1 = extractAppDescription(value);
+    expect(result1).toBe(
+      `Mobile application VILLA MELBECK  is a presentation of 3d model with Augmented Reality technology. When you point your mobile phone camera at printed land development plan (available within the application in PDF format), you will see 3dimensional model of provided building.`
+    );
+
+    value = appHtmlDummy2;
+
+    result1 = extractAppDescription(value);
+    expect(result1).toBe(
+      `Aplikacja mobilna RESIDENCE LIVING to prezentacja modelu 3d za pomocą technologii Augmented Reality. Gdy skierują Państwo kamerę swojego telefonu na wydrukowany wcześniej plan zagospodarowania terenu (zawarty w aplikacji w formie PDF'a), pojawi się na ekranie model trójwymiarowy budynku.`
+    );
+  });
+  it("extractAppAndroidLink", () => {
+    let value = appHtmlDummy;
+
+    const result1 = extractAppAndroidLink(value);
+    expect(result1).toBe(
+      `https://play.google.com/store/apps/details?id=com.vf.dus167`
+    );
+  });
+  it("extractAppIOSLink", () => {
+    let value = appHtmlDummy;
+
+    const result1 = extractAppIOSLink(value);
+    expect(result1).toBe(
+      `https://apps.apple.com/pl/app/villa-melbeck/id1491022041`
+    );
+  });
+  it("extractAppClient", () => {
+    let value = appHtmlDummy;
+
+    const result1 = extractAppClient(value); //?
+    expect(result1).toBe(`VIRTUELL FORMAT`);
   });
 });

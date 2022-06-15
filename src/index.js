@@ -40,6 +40,18 @@ const appImageBtn = document.getElementById("app-image-button");
 const appNameEl = document.getElementById("app-name");
 const appNameBtn = document.getElementById("app-name-button");
 
+const appDescriptionEl = document.getElementById("app-description");
+const appDescriptionBtn = document.getElementById("app-description-button");
+
+const appAndroidEl = document.getElementById("app-android");
+const appAndroidBtn = document.getElementById("app-android-button");
+
+const appIOSEl = document.getElementById("app-ios");
+const appIOSBtn = document.getElementById("app-ios-button");
+
+const appClientEl = document.getElementById("app-client");
+const appClientBtn = document.getElementById("app-client-button");
+
 //vars
 const projectCategoriesEl = document.getElementById("categories");
 
@@ -114,21 +126,18 @@ function extractProjectCountry(valueToSearchFromIndex) {
 function extractProjectData(valueToSearchFromIndex) {
   let result = "";
 
-  const valueToSearchThrough = valueToSearchFromIndex.substring(
-    valueToSearchFromIndex.indexOf(`href="`) + 6,
-    valueToSearchFromIndex.indexOf(`" class`)
-  ); //?
+  const regex = /href=".+" class/gm;
+  result = valueToSearchFromIndex.match(regex)[0];
 
-  if (!valueToSearchThrough.startsWith("en")) {
-    result = valueToSearchThrough.substring(
-      0,
-      valueToSearchThrough.indexOf("__")
-    );
+  result = result.substring(6, 16);
+
+  if (!result.startsWith("en")) {
+    result = result.substring(0, 7);
   } else {
-    result = valueToSearchThrough.substring(3, 10);
+    result = result.substring(3, 10);
   }
 
-  return result.trim(); //?
+  return result.trim();
 }
 function extractProjectCategories(valueToSearchFromIndex) {
   let result = "";
@@ -199,7 +208,45 @@ function extractAppName(valueToSearchFromIndex) {
 
   return result.toUpperCase();
 }
+function extractAppDescription(valueToSearchFromIndex) {
+  let result = valueToSearchFromIndex.substring(
+    valueToSearchFromIndex.indexOf("<!--lewa-->"),
+    valueToSearchFromIndex.indexOf("<!--end container-->")
+  );
 
+  const regex = /hero-heading.+/gm;
+  result = result.match(regex)[0];
+
+  console.log(result);
+
+  result = result.substring(14, result.length);
+
+  // result = result.substring(0, result.indexOf(`<br />`));
+
+  return result.trim();
+}
+function extractAppAndroidLink(valueToSearchFromIndex) {
+  const regex =
+    /<a href=".+"><img src="images\/buttons_01-min.png" alt="Android" \/><\/a>/gm;
+  let result = valueToSearchFromIndex.match(regex)[0];
+  result = result.substring(9, result.indexOf(`">`));
+  return result;
+}
+function extractAppIOSLink(valueToSearchFromIndex) {
+  const regex =
+    /<a href=".+"><img src="images\/buttons_02-min\.png" alt="IOS" \/><\/a>/gm;
+  let result = valueToSearchFromIndex.match(regex)[0];
+  result = result.substring(9, result.indexOf(`">`));
+  return result;
+}
+function extractAppClient(valueToSearchFromIndex) {
+  const regex = /<h4>.+<\/h4>/gm;
+  let result = valueToSearchFromIndex.match(regex)[0];
+  result = result.substring(4, result.length - 5);
+  return result;
+}
+
+//logic rest
 function showElement(element) {
   if (element.classList.contains("hidden")) {
     element.classList.remove("hidden");
@@ -265,7 +312,10 @@ function defineTypeOfInput(inputText) {
     inputText.indexOf("<!--end container-->")
   ); //?
   if (appPart) {
-    if (appPart.includes("AR application")) {
+    if (
+      appPart.includes("AR application") ||
+      appPart.includes("Aplikacja AR")
+    ) {
       return typeOfInput.APP_PROJECT;
     }
   }
@@ -351,34 +401,34 @@ function showAndRefreshAppInput(textInput) {
     appNameEl,
     appNameBtn
   );
-  // //project Country
-  // updateInfoWithCopyToClipboardButton(
-  //   textInput,
-  //   extractProjectCountry,
-  //   projectCountryEl,
-  //   projectCountryBtn
-  // );
-  // //project Data
-  // updateInfoWithCopyToClipboardButton(
-  //   textInput,
-  //   extractProjectData,
-  //   projectDataEl,
-  //   null
-  // );
-  // //project Categories
-  // updateInfoWithCopyToClipboardButton(
-  //   textInput,
-  //   extractProjectCategories,
-  //   projectCategoriesEl,
-  //   null
-  // );
-  // //project Ico
-  // updateInfoWithCopyToClipboardButton(
-  //   textInput,
-  //   extractProjectIco,
-  //   projectIcoEl,
-  //   projectIcoBtn
-  // );
+  //app description
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractAppDescription,
+    appDescriptionEl,
+    appDescriptionBtn
+  );
+  //app android link
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractAppAndroidLink,
+    appAndroidEl,
+    appAndroidBtn
+  );
+  //app iOS link
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractAppIOSLink,
+    appIOSEl,
+    appIOSBtn
+  );
+  //app iOS link
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractAppClient,
+    appClientEl,
+    appClientBtn
+  );
 }
 
 function updateInfoWithCopyToClipboardButton(textInput, callbackFn, el, btn) {
@@ -399,5 +449,9 @@ module.exports = {
   extractProjectIco,
   extractAppImage,
   extractAppName,
+  extractAppDescription,
+  extractAppAndroidLink,
+  extractAppIOSLink,
+  extractAppClient,
   typeOfInput,
 };
