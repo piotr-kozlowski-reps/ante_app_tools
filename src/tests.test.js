@@ -12,6 +12,8 @@ const {
   extractAppIOSLink,
   extractAppName,
   extractAppClient,
+  extractAnimLink,
+  extractAllImagesIntoArrayOfData,
   typeOfInput,
 } = require("./index.js");
 const {
@@ -20,6 +22,7 @@ const {
   imagesHtmlDummy,
   indexHtmlDummy2,
   indexHtmlDummy,
+  animHtmlDummy,
 } = require("./dummy.js");
 
 describe("overall", () => {
@@ -385,9 +388,15 @@ describe("app", () => {
   it("extractAppAndroidLink", () => {
     let value = appHtmlDummy;
 
-    const result1 = extractAppAndroidLink(value);
+    let result1 = extractAppAndroidLink(value);
     expect(result1).toBe(
       `https://play.google.com/store/apps/details?id=com.vf.dus167`
+    );
+
+    value = appHtmlDummy2;
+    result1 = extractAppAndroidLink(value);
+    expect(result1).toBe(
+      `https://play.google.com/store/apps/details?id=com.vf.ess54`
     );
   });
   it("extractAppIOSLink", () => {
@@ -401,7 +410,78 @@ describe("app", () => {
   it("extractAppClient", () => {
     let value = appHtmlDummy;
 
-    const result1 = extractAppClient(value); //?
+    let result1 = extractAppClient(value); //?
     expect(result1).toBe(`VIRTUELL FORMAT`);
+
+    value = imagesHtmlDummy;
+
+    result1 = extractAppClient(value); //?
+    expect(result1).toBe(`VIRTUELL FORMAT`);
+  });
+
+  describe("anim", () => {
+    it("extractAnimLink", () => {
+      let value = animHtmlDummy;
+
+      const result1 = extractAnimLink(value);
+      expect(result1).toEqual("https://www.youtube.com/embed/D4cMDRMeGW0");
+    });
+  });
+
+  describe("images", () => {
+    it("extractImagesClient", () => {
+      let value = imagesHtmlDummy;
+
+      const result1 = extractAppClient(value);
+      expect(result1).toEqual("VIRTUELL FORMAT");
+    });
+
+    it("extracting all images", () => {
+      let value = imagesHtmlDummy;
+      let result = extractAllImagesIntoArrayOfData(value);
+      expect(result).toEqual([
+        {
+          imageAlt: "07.2020r. Osiedle mieszkaniowe, Aachen, Niemcy.",
+          imageIsBig: true,
+          imageSrc: "2020_07_osiedle_mieszkaniowe_aachen_niemcy_002.jpg",
+        },
+        {
+          imageAlt: "07.2020r. Osiedle mieszkaniowe, Aachen, Niemcy.",
+          imageIsBig: false,
+          imageSrc: "2020_07_osiedle_mieszkaniowe_aachen_niemcy_003.jpg",
+        },
+        {
+          imageAlt: "07.2020r. Osiedle mieszkaniowe, Aachen, Niemcy.",
+          imageIsBig: false,
+          imageSrc: "2020_07_osiedle_mieszkaniowe_aachen_niemcy_001.jpg",
+        },
+        {
+          imageAlt: "07.2020r. Osiedle mieszkaniowe, Aachen, Niemcy.",
+          imageIsBig: false,
+          imageSrc: "2020_07_osiedle_mieszkaniowe_aachen_niemcy_004.jpg",
+        },
+        {
+          imageAlt: "07.2020r. Osiedle mieszkaniowe, Aachen, Niemcy.",
+          imageIsBig: false,
+          imageSrc: "2020_07_osiedle_mieszkaniowe_aachen_niemcy_005.jpg",
+        },
+        {
+          imageAlt: "07.2020r. Osiedle mieszkaniowe, Aachen, Niemcy.",
+          imageIsBig: false,
+          imageSrc: "2020_07_osiedle_mieszkaniowe_aachen_niemcy_006.jpg",
+        },
+        {
+          imageAlt: "07.2020r. Osiedle mieszkaniowe, Aachen, Niemcy.",
+          imageIsBig: false,
+          imageSrc: "2020_07_osiedle_mieszkaniowe_aachen_niemcy_007.jpg",
+        },
+        {
+          imageAlt: "07.2020r. Osiedle mieszkaniowe, Aachen, Niemcy.",
+          imageIsBig: false,
+          imageSrc: "2020_07_osiedle_mieszkaniowe_aachen_niemcy_008.jpg",
+        },
+        { imageAlt: "Ante logo", imageIsBig: false, imageSrc: "ante-logo.png" },
+      ]);
+    });
   });
 });

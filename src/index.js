@@ -1,5 +1,3 @@
-// const { imagesHtmlDummy, indexHtmlDummy } = require("./dummy.js");
-
 //enum
 const typeOfInput = {
   INDEX: "INDEXHTML",
@@ -19,6 +17,8 @@ const resultNotUnderstandableEl = document.getElementById(
 );
 const resultForIndexEl = document.getElementById("result-for-index");
 const resultForAppEl = document.getElementById("result-for-app");
+const resultForAnimEl = document.getElementById("result-for-anim");
+const resultForImagesEl = document.getElementById("result-for-images");
 
 const projectNameEl = document.getElementById("project-name");
 const projectNameBtn = document.getElementById("project-name-button");
@@ -52,6 +52,17 @@ const appIOSBtn = document.getElementById("app-ios-button");
 const appClientEl = document.getElementById("app-client");
 const appClientBtn = document.getElementById("app-client-button");
 
+const animLinkEl = document.getElementById("anim-link");
+const animLinkBtn = document.getElementById("anim-link-button");
+
+const aniClientEl = document.getElementById("anim-client");
+const aniClientBtn = document.getElementById("anim-client-button");
+
+const imagesClientEl = document.getElementById("images-client");
+const imagesClientBtn = document.getElementById("images-client-button");
+
+const imagesContainer = document.getElementById("container-images");
+
 //vars
 const projectCategoriesEl = document.getElementById("categories");
 
@@ -59,7 +70,7 @@ const projectCategoriesEl = document.getElementById("categories");
 indexTextareaEl.addEventListener("input", refresh);
 
 //dummy paste
-indexTextareaEl.innerText = appHtmlDummy;
+// indexTextareaEl.innerText = imagesHtmlDummy;
 
 //first refresh on start
 refresh();
@@ -75,7 +86,6 @@ function refresh() {
   }
 
   const currentTypeOfInput = defineTypeOfInput(textInput);
-
   switch (currentTypeOfInput) {
     case typeOfInput.INDEX:
       showAndRefreshIndexInput(textInput);
@@ -83,6 +93,14 @@ function refresh() {
 
     case typeOfInput.APP_PROJECT:
       showAndRefreshAppInput(textInput);
+      break;
+
+    case typeOfInput.ANIM_PROJECT:
+      showAndRefreshAnimInput(textInput);
+      break;
+
+    case typeOfInput.IMAGES_PROJECT:
+      showAndRefreshImagesInput(textInput);
       break;
 
     case typeOfInput.EMPTY:
@@ -127,8 +145,10 @@ function extractProjectData(valueToSearchFromIndex) {
   let result = "";
 
   const regex = /href=".+" class/gm;
-  result = valueToSearchFromIndex.match(regex)[0];
+  result = valueToSearchFromIndex.match(regex);
 
+  if (!result || result.length === 0) return "";
+  result = result[0];
   result = result.substring(6, 16);
 
   if (!result.startsWith("en")) {
@@ -221,8 +241,6 @@ function extractAppDescription(valueToSearchFromIndex) {
 
   result = result.substring(14, result.length);
 
-  // result = result.substring(0, result.indexOf(`<br />`));
-
   return result.trim();
 }
 function extractAppAndroidLink(valueToSearchFromIndex) {
@@ -243,6 +261,21 @@ function extractAppClient(valueToSearchFromIndex) {
   const regex = /<h4>.+<\/h4>/gm;
   let result = valueToSearchFromIndex.match(regex)[0];
   result = result.substring(4, result.length - 5);
+  return result;
+}
+
+//anim extract
+function extractAnimLink(valueToSearchFromIndex) {
+  let result = valueToSearchFromIndex.substring(
+    valueToSearchFromIndex.indexOf("<iframe"),
+    valueToSearchFromIndex.indexOf("</iframe>")
+  ); //?
+
+  result = result.substring(
+    result.indexOf(`src=`) + 5,
+    result.indexOf(`" frame`)
+  ); //?
+
   return result;
 }
 
@@ -320,6 +353,16 @@ function defineTypeOfInput(inputText) {
     }
   }
 
+  // anim html
+  if (inputText.includes(`video-responsive`)) {
+    return typeOfInput.ANIM_PROJECT;
+  }
+
+  // images html
+  if (inputText.includes(`<div class="img-gallery">`)) {
+    return typeOfInput.IMAGES_PROJECT;
+  }
+
   return result;
 }
 
@@ -328,6 +371,8 @@ function hideAll() {
   hideElement(resultNotUnderstandableEl);
   hideElement(resultForIndexEl);
   hideElement(resultForAppEl);
+  hideElement(resultForAnimEl);
+  hideElement(resultForImagesEl);
 }
 
 function copyToClipboard(text) {
@@ -430,12 +475,154 @@ function showAndRefreshAppInput(textInput) {
     appClientBtn
   );
 }
+function showAndRefreshImagesInput(textInput) {
+  showElement(resultForImagesEl);
+
+  const arrayOfImages = extractAllImagesIntoArrayOfData(textInput);
+
+  let innerHtmlForImages = "";
+  arrayOfImages.forEach((img, index) => {
+    if (img.imageSrc !== "ante-logo.png") {
+      innerHtmlForImages += `
+                  <div class="mt-10 mb-10">
+                <p class="font-semibold">
+                  Obrazek - ${index + 1}:
+                  <br />
+                  <span>img: </span>
+                  <span
+                    id="image-name-${index + 1}"
+                    class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                    >${img.imageSrc}</span
+                  >
+
+                </p>
+
+               <p class="font-semibold mt-1">
+               <span>alt: </span>
+                  <span
+                    id="image-alt-${index + 1}"
+                    class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                    >${img.imageAlt}</span
+                  >
+
+                </p>
+
+                               <p class="font-semibold mt-1">
+               <span>isBig: </span>
+                  <span
+                    id="image-alt-${index + 1}"
+                    class="px-5 py-1 ml-10 font-normal text-xs text-gray-6  rounded-2xl max-w-full ${
+                      img.imageIsBig ? "bg-red-400" : "bg-gray-200"
+                    }"
+                    >${img.imageIsBig}</span
+                  >
+
+                </p>
+
+
+              </div>`;
+    }
+  });
+
+  imagesContainer.innerHTML = innerHtmlForImages;
+
+  // //app image
+  // updateInfoWithCopyToClipboardButton(
+  //   textInput,
+  //   extractAppImage,
+  //   appImageEl,
+  //   appImageBtn
+  // );
+  // //app name
+  // updateInfoWithCopyToClipboardButton(
+  //   textInput,
+  //   extractAppName,
+  //   appNameEl,
+  //   appNameBtn
+  // );
+  // //app description
+  // updateInfoWithCopyToClipboardButton(
+  //   textInput,
+  //   extractAppDescription,
+  //   appDescriptionEl,
+  //   appDescriptionBtn
+  // );
+  // //app android link
+  // updateInfoWithCopyToClipboardButton(
+  //   textInput,
+  //   extractAppAndroidLink,
+  //   appAndroidEl,
+  //   appAndroidBtn
+  // );
+  // //app iOS link
+  // updateInfoWithCopyToClipboardButton(
+  //   textInput,
+  //   extractAppIOSLink,
+  //   appIOSEl,
+  //   appIOSBtn
+  // );
+  //images client
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractAppClient,
+    imagesClientEl,
+    imagesClientBtn
+  );
+}
+
+function showAndRefreshAnimInput(textInput) {
+  showElement(resultForAnimEl);
+
+  //anim link
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractAnimLink,
+    animLinkEl,
+    animLinkBtn
+  );
+
+  //anim client
+  updateInfoWithCopyToClipboardButton(
+    textInput,
+    extractAppClient,
+    aniClientEl,
+    aniClientBtn
+  );
+}
 
 function updateInfoWithCopyToClipboardButton(textInput, callbackFn, el, btn) {
   el.innerHTML = callbackFn(textInput);
   if (btn) {
     btn.addEventListener("click", copyToClipboard.bind(null, el.innerHTML));
   }
+}
+
+function extractAllImagesIntoArrayOfData(textInput) {
+  let result = [];
+
+  const divWithImagesExtracted = textInput.match(/img-gallery.+div>/gms);
+
+  let divWithImagesArray = [];
+  if (divWithImagesExtracted.length > 0) {
+    divWithImagesArray = divWithImagesExtracted[0].match(/img.+/gm);
+  }
+
+  if (divWithImagesArray && divWithImagesArray.length > 0) {
+    divWithImagesArray.forEach((img) => {
+      if (img.includes("src") && img.includes("alt")) {
+        let imageSrc = /src=.+" /g.exec(img);
+        imageSrc = imageSrc[0].substring(12, imageSrc[0].length - 2);
+
+        let imageAlt = /alt=.+"/g.exec(img);
+        imageAlt = imageAlt[0].substring(5, imageAlt[0].length - 1);
+
+        let imageIsBig = img.includes(`class="big-img"`);
+
+        result.push({ imageSrc, imageAlt, imageIsBig });
+      }
+    });
+  }
+  return result;
 }
 
 //exports
@@ -453,5 +640,7 @@ module.exports = {
   extractAppAndroidLink,
   extractAppIOSLink,
   extractAppClient,
+  extractAnimLink,
+  extractAllImagesIntoArrayOfData,
   typeOfInput,
 };

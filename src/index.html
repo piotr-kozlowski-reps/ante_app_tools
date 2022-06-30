@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../public/styles.css" />
+    <!-- <link rel="stylesheet" href="../public/styles.css" /> -->
     <title>extract tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="min-h-screen bg-gray-200">
     <div class="bg-white md:container md:mx-auto rounded-2xl">
@@ -21,7 +22,6 @@
         </form>
 
         <!-- wynik -->
-
         <div class="mt-10">
           <p class="font-semibold">Wynik:</p>
 
@@ -157,6 +157,7 @@
               </p>
             </div>
           </div>
+          <!-- koniec wynik dla index -->
 
           <!-- wynik dla app -->
           <div id="result-for-app" class="mt-8">
@@ -271,6 +272,81 @@
               </p>
             </div>
           </div>
+          <!-- koniec wynik dla app -->
+
+          <!-- wynik dla anim -->
+          <div id="result-for-anim" class="mt-8">
+            <div>
+              <p class="font-semibold mb-4 text-blue-400">Animacja</p>
+            </div>
+
+            <div>
+              <p class="font-semibold">
+                Link do youtube'a:
+                <span
+                  id="anim-link"
+                  class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                  >drak danych</span
+                >
+                <button
+                  type="button"
+                  class="text-xs text-white bg-green-600 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+                  id="anim-link-button"
+                >
+                  kopiuj
+                </button>
+              </p>
+            </div>
+
+            <div class="mt-2">
+              <p class="font-semibold">
+                Klient:
+                <span
+                  id="anim-client"
+                  class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                  >drak danych</span
+                >
+                <button
+                  type="button"
+                  class="text-xs text-white bg-green-600 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+                  id="anim-client-button"
+                >
+                  kopiuj
+                </button>
+              </p>
+            </div>
+          </div>
+          <!-- koniec wynik dla anim -->
+
+          <!-- wynik dla image -->
+          <div id="result-for-images" class="mt-8">
+            <div>
+              <p class="font-semibold mb-4 text-blue-400">
+                Projekt z Obrazkami
+              </p>
+            </div>
+
+            <div id="container-images"></div>
+
+            <div class="mt-2">
+              <p class="font-semibold">
+                Klient:
+                <span
+                  id="images-client"
+                  class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
+                  >drak danych</span
+                >
+                <button
+                  type="button"
+                  class="text-xs text-white bg-green-600 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+                  id="images-client-button"
+                >
+                  kopiuj
+                </button>
+              </p>
+            </div>
+          </div>
+          <!-- koniec wynik dla image -->
         </div>
       </div>
     </div>
