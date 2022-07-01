@@ -482,7 +482,14 @@ function showAndRefreshImagesInput(textInput) {
 
   let innerHtmlForImages = "";
   arrayOfImages.forEach((img, index) => {
-    if (img.imageSrc !== "ante-logo.png") {
+    const imageSourceText = img.imageSrc;
+    const imageAltText = img.imageAlt;
+    const imageIdNameEl = `image-name-${index + 1}`;
+    const imageIdNameBtn = `image-name-${index + 1}-button`;
+    const imageIdAltEl = `image-alt-${index + 1}`;
+    const imageIdAltBtn = `image-alt-${index + 1}-button`;
+
+    if (imageSourceText !== "ante-logo.png") {
       innerHtmlForImages += `
                   <div class="mt-10 mb-10">
                 <p class="font-semibold">
@@ -490,24 +497,38 @@ function showAndRefreshImagesInput(textInput) {
                   <br />
                   <span>img: </span>
                   <span
-                    id="image-name-${index + 1}"
+                    id="${imageIdNameEl}"
                     class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
-                    >${img.imageSrc}</span
+                    >${imageSourceText}</span
                   >
+                  <button
+                  type="button"
+                  class="text-xs text-white bg-green-600 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+                  id="${imageIdNameBtn}"
+                >
+                  kopiuj
+                </button>
 
                 </p>
 
                <p class="font-semibold mt-1">
                <span>alt: </span>
                   <span
-                    id="image-alt-${index + 1}"
+                    id="${imageIdAltEl}"
                     class="px-5 py-1 ml-10 font-normal text-xs text-gray-6 bg-gray-200 rounded-2xl max-w-full"
-                    >${img.imageAlt}</span
+                    >${imageAltText}</span
                   >
+                <button
+                  type="button"
+                  class="text-xs text-white bg-green-600 ml-3 uppercase p-1 rounded-md hover:bg-gray-600"
+                  id="${imageIdAltBtn}"
+                >
+                  kopiuj
+                </button>
 
                 </p>
 
-                               <p class="font-semibold mt-1">
+              <p class="font-semibold mt-1">
                <span>isBig: </span>
                   <span
                     id="image-alt-${index + 1}"
@@ -516,15 +537,38 @@ function showAndRefreshImagesInput(textInput) {
                     }"
                     >${img.imageIsBig}</span
                   >
-
                 </p>
-
-
               </div>`;
     }
   });
 
   imagesContainer.innerHTML = innerHtmlForImages;
+
+  arrayOfImages.forEach((img, index) => {
+    const imageSourceText = img.imageSrc;
+    const imageAltText = img.imageAlt;
+
+    const imageIdAltEl = `image-alt-${index + 1}`;
+    const imageIdAltBtn = `image-alt-${index + 1}-button`;
+
+    if (imageSourceText !== "ante-logo.png") {
+      //image name
+      updateInfoWithCopyToClipboardButton(
+        imageSourceText,
+        passTextToBeCopied,
+        document.getElementById(`image-name-${index + 1}`),
+        document.getElementById(`image-name-${index + 1}-button`)
+      );
+
+      //image alt
+      updateInfoWithCopyToClipboardButton(
+        imageAltText,
+        passTextToBeCopied,
+        document.getElementById(`image-alt-${index + 1}`),
+        document.getElementById(`image-alt-${index + 1}-button`)
+      );
+    }
+  });
 
   // //app image
   // updateInfoWithCopyToClipboardButton(
@@ -588,6 +632,10 @@ function showAndRefreshAnimInput(textInput) {
     aniClientEl,
     aniClientBtn
   );
+}
+
+function passTextToBeCopied(textToBeCopied) {
+  return textToBeCopied;
 }
 
 function updateInfoWithCopyToClipboardButton(textInput, callbackFn, el, btn) {
